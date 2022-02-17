@@ -117,7 +117,7 @@ const AddProductForm = ({ onSubmit: onSubmitProp }) => {
 
 const Products = ({ initialProducts }) => {
   // Bring in the products to display and functions used to update the data.
-  const { products, onSubmit, updateProduct } = useProductsFlow({
+  const { products, onSubmit } = useProductsFlow({
     initialProducts,
   });
 
