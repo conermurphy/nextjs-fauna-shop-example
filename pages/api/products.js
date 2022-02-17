@@ -2,6 +2,7 @@ import { listProducts, createProduct, updateProduct } from '../../lib/fauna';
 
 export default async function handler(req, res) {
   const handlers = {
+    // If a GET request, return all products
     GET: async () => {
       const entries = await listProducts();
 
@@ -9,6 +10,7 @@ export default async function handler(req, res) {
     },
 
     POST: async () => {
+      // If a POST request try to update the product.
       try {
         const {
           body: { title, quantity, id },
@@ -20,6 +22,7 @@ export default async function handler(req, res) {
         });
 
         res.json(updated);
+        // If updating fails, then create a new product
       } catch (e) {
         const {
           body: { title, quantity },
@@ -34,6 +37,7 @@ export default async function handler(req, res) {
     },
   };
 
+  // If not a GET or POST request then return
   if (!handlers[req.method]) {
     return res.status(405).end();
   }

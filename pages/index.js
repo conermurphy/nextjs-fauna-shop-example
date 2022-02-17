@@ -5,7 +5,7 @@ import { listProducts } from '../lib/fauna';
 
 const PRODUCTS_PATH = '/api/products';
 
-const putProduct = (payload) => {
+const putProduct = async (payload) => {
   return fetch(PRODUCTS_PATH, {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -22,20 +22,15 @@ const useProductsFlow = ({ initialProducts }) => {
     initialData: initialProducts,
   });
 
+  // Perform POST request to Fauna with the passed in values
   const onSubmit = async (payload) => {
-    await putProduct(payload);
-    await mutate(PRODUCTS_PATH);
-  };
-
-  const updateProduct = async (payload) => {
     await putProduct(payload);
     await mutate(PRODUCTS_PATH);
   };
 
   return {
     products,
-    onSubmit,
-    updateProduct,
+    onSubmit
   };
 };
 
@@ -48,10 +43,12 @@ const AddProductForm = ({ onSubmit: onSubmitProp }) => {
   const [formState, setFormState] = useState('initial');
   const isSubmitting = formState === 'submitting';
 
+  // Handling the submit of our form.
   const onSubmit = (ev) => {
     ev.preventDefault();
 
     setFormState('submitting');
+    // Submit the form using the function declared in useProductsFlow
     onSubmitProp(values)
       .then(() => {
         setValues(initial);
@@ -62,6 +59,7 @@ const AddProductForm = ({ onSubmit: onSubmitProp }) => {
       });
   };
 
+  // On change, update the state for the form values.
   const makeOnChange = (fieldName) => {
     return ({ target: { value, valueAsNumber } }) => {
       if (fieldName === 'quantity') {
@@ -118,6 +116,7 @@ const AddProductForm = ({ onSubmit: onSubmitProp }) => {
 };
 
 const Products = ({ initialProducts }) => {
+  // Bring in the products to display and functions used to update the data.
   const { products, onSubmit, updateProduct } = useProductsFlow({
     initialProducts,
   });
@@ -139,7 +138,7 @@ const Products = ({ initialProducts }) => {
                   <button
                     type="button"
                     onClick={() => {
-                      return updateProduct({
+                      return onSubmit({
                         id: _id,
                         quantity: quantity + 1,
                         title,
@@ -152,7 +151,7 @@ const Products = ({ initialProducts }) => {
                   <button
                     type="button"
                     onClick={() => {
-                      return updateProduct({
+                      return onSubmit({
                         id: _id,
                         quantity: quantity - 1,
                         title,
