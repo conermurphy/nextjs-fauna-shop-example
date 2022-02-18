@@ -30,7 +30,7 @@ const useProductsFlow = ({ initialProducts }) => {
 
   return {
     products,
-    onSubmit
+    onSubmit,
   };
 };
 
@@ -157,7 +157,9 @@ const Products = ({ initialProducts }) => {
                         title,
                       });
                     }}
-                    className={`px-2 bg-white rounded-lg ${quantity === 0 ? 'opacity-60' : ''}`}
+                    className={`px-2 bg-white rounded-lg ${
+                      quantity === 0 ? 'opacity-60' : ''
+                    }`}
                     disabled={quantity === 0}
                   >
                     -

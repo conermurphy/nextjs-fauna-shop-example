@@ -11,11 +11,11 @@ export default async function handler(req, res) {
 
     POST: async () => {
       // If a POST request try to update the product.
-      try {
-        const {
-          body: { title, quantity, id },
-        } = req;
+      const {
+        body: { title, quantity, id },
+      } = req;
 
+      try {
         const updated = await updateProduct(id, {
           title,
           quantity,
@@ -24,9 +24,6 @@ export default async function handler(req, res) {
         res.json(updated);
         // If updating fails, then create a new product
       } catch (e) {
-        const {
-          body: { title, quantity },
-        } = req;
         const created = await createProduct({
           title,
           quantity,
